@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      
+      >
+    <h:body>
+    
+    	<ui:composition template="/template/common/commonLayout.xhtml">
+    		<ui:define name="content">
+        	<f:loadBundle basename="resource.MessageResources" var="msg" />
+        	
+        <f:view locale="#{languageBean.localeCode}"  contentType="text/html">
+        <p:gmap center="41.381542, 2.122893" zoom="15" type="HYBRID" style="width:600px;height:400px" />  
+             asdsadasdasdas 
+	</f:view>
+    		</ui:define>
+    	</ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+       xmlns:p="http://primefaces.org/ui"
+      >
+    <h:body>
+    	<ui:composition template="/template/common/commonLayout.xhtml">
+    		<ui:define name="content">
+        	<f:loadBundle basename="resource.MessageResources" var="msg" />
+<div class="colUnique" >
+<f:view>
+    		<p:panel header="#{msg.manage_hotel}" style="width:100%;" >
+    		<h:form id="form-manage-hotel">
+    		<p:messages id="msgs" escape="false"/>
+    		<h:panelGrid columns="2">
+    		<h:outputLabel styleClass="capitalize" for="nombreHotel" value="#{msg.name}:" />
+    		 <p:inputText id="nombreHotel" value="#{hotelDTOBean2.hotel.nombre}" required="true" label="#{msg.name}:" validatorMessage="#{msg.name}:#{hotelDTOBean2.hotel.nombre} no es un nombre correcto"/>
+    		 <h:outputLabel styleClass="capitalize" for="descHotel" value="#{msg.description}:" />
+    		 <p:inputText id="descHotel" value="#{hotelDTOBean2.hotel.descripcion}" label="#{msg.description}:" />
+    		 <h:outputLabel styleClass="capitalize" for="direccionHotel" value="#{msg.address}:" />
+    		 <p:inputText id="direccionHotel" value="#{hotelDTOBean2.hotel.direccion}" label="#{msg.address}:" />
+    		 <h:outputLabel styleClass="capitalize" for="estrellasHotel" value="#{msg.stars}:" />
+    		 <p:rating id="estrellasHotel" value="#{hotelDTOBean2.hotel.estrellas}" />
+    		 <h:outputLabel styleClass="capitalize" for="queryCity" value="#{msg.city}:" />	 <p:autoComplete   size="30" forceSelection="true" var="city" itemLabel="#{city.nombre}" itemValue="#{city}" converter="ciudadConverter"   id="queryCity" value="#{hotelDTOBean2.hotel.ciudad}"  completeMethod="#{searchHotelBean.searchCompleteCity}" maxResults="20" minQueryLength="3"/>
+    		</h:panelGrid>
+    		
+    		
+    	
+    		<p:panelGrid columns="3" style="margin-top:40px;" styleClass="noBorders">
+    	
+    		<p:commandButton   onclick="dlgNewRoomType.show();" value="#{msg.room_types}"  />
+    
+         
+		
+		
+<p:commandButton  onclick="dlgpndHotel.show();" value="#{msg.unavailability_periods}"  />
+	<p:commandButton value="#{msg.update_hotel}" actionListener="#{actionsControllerBean.updateHotelPerform}" update=":growl">
+        <f:attribute name="hotel" value="#{hotelDTOBean2.hotel}" />
+         <f:attribute name="hotelid" value="#{hotelDTOBean2.hotel.id}" />
+        </p:commandButton> 
+	
+			
+	</p:panelGrid>		
+				
+	
+		
+	
+	<p:dialog header="#{msg.unavailability_periods}" maximizable="true"  widgetVar="dlgpndHotel">
+	
+<p:dataTable id="tablepndHotel"   var="pndHotel" value="#{hotelDTOBean2.hotel.periodosNoDisponibilidad}">
+<p:column> <p:commandButton update="tablepndHotel"    oncomplete="dlgpndHotel.show();"  value="-" action="#{hotelDTOBean2.hotel.removePeriodoNoDisponibilidadDTO(pndHotel)}"></p:commandButton> </p:column>
+<p:column> <f:facet name="header">#{msg.reason}</f:facet> <p:inputText required="true"  value="#{pndHotel.motivo}"></p:inputText> </p:column>
+<p:column> <f:facet name="header">#{msg.start_date}</f:facet> <p:calendar required="true" value="#{pndHotel.fechaIni}" pattern="yyyy/MM/dd" converter="primefacesCalendarConverter"></p:calendar>
+</p:column> <p:column> <f:facet name="header">#{msg.end_date}</f:facet> <p:calendar required="true" value="#{pndHotel.fechaFin}" pattern="yyyy/MM/dd" converter="primefacesCalendarConverter"></p:calendar> </p:column>
+</p:dataTable>
+<p:commandButton update="tablepndHotel" action="#{hotelDTOBean2.hotel.addPeriodoNoDisponibilidadDTO()}"  oncomplete="dlgpndHotel.show();" value="#{msg.new}" />
+
+	
+</p:dialog>
+	
+	
+	
+	
+	 	        <p:dialog  maximizable="true"  header="#{msg.rooms}"  id="dialogroomtype"  widgetVar="dlgNewRoomType">
+
+ 
+<p:dataTable id="tableHabitaciones" var="habitacion" value="#{hotelDTOBean2.hotel.habitaciones}">
+<p:column>
+<p:commandButton action="#{hotelDTOBean2.hotel.addTipoHabitacion()}" oncomplete="dlgNewRoomType.show();" value="+" update="tableHabitaciones"/>
+<p:commandButton update="tableHabitaciones" oncomplete="dlgNewRoomType.show();" value="-" action="#{hotelDTOBean2.hotel.deleteTipoHabitacion(habitacion)}"></p:commandButton>
+</p:column>
+<p:column>
+<f:facet name="header">#{msg.unavailability_periods}</f:facet>
+<p:dialog header="#{msg.unavailability_periods}" maximizable="true"  widgetVar="dlgpnd#{habitacion.tipoHabitacionId}">
+<p:dataTable id="tablepnd"   var="pnd" value="#{habitacion.periodosDeNoDisponibilidad}">
+<p:column> <p:commandButton update="tablepnd"    oncomplete="dlgpnd#{habitacion.tipoHabitacionId}.show();"  value="-" action="#{habitacion.removePeriodoNoDisponibilidadDTO(pnd)}"></p:commandButton> </p:column>
+<p:column> <f:facet name="header">#{msg.reason}</f:facet> <p:inputText  value="#{pnd.motivo}"></p:inputText> </p:column>
+<p:column> <f:facet name="header">#{msg.start_date}</f:facet> <p:calendar value="#{pnd.fechaIni}" pattern="yyyy/MM/dd" converter="primefacesCalendarConverter"></p:calendar>
+</p:column> <p:column> <f:facet name="header">#{msg.end_date}</f:facet> <p:calendar value="#{pnd.fechaFin}" pattern="yyyy/MM/dd" converter="primefacesCalendarConverter"></p:calendar> </p:column>
+</p:dataTable>
+<p:commandButton update="tablepnd" action="#{habitacion.addPeriodoNoDisponibilidadDTO()}"  oncomplete="dlgpnd#{habitacion.tipoHabitacionId}.show();" value="#{msg.new}" />
+</p:dialog>
+<p:commandButton style=" font-size:10px;"  onclick="dlgpnd#{habitacion.tipoHabitacionId}.show();" value="#{msg.unavailability_periods}"  />
+</p:column>
+<p:column>
+<f:facet name="header">#{msg.deals}</f:facet>
+<p:dialog header="#{msg.deals}" maximizable="true" height="400"  widgetVar="dlgDescuento#{habitacion.tipoHabitacionId}" >
+<p:dataTable id="tableDescuentos" var="descuento" value="#{habitacion.descuentos}">
+	<p:column> <p:commandButton update="tableDescuentos" oncomplete="dlgDescuento#{habitacion.tipoHabitacionId}.show();" value="-" action="#{habitacion.removeOfertaDescuentoDTO(descuento)}"></p:commandButton> </p:column>
+	<p:column> <f:facet name="header">#{msg.percentage}</f:facet> <p:inputText  required="true" value="#{descuento.porcentaje}"></p:inputText> </p:column>
+	<p:column> <f:facet name="header">#{msg.start_date}</f:facet> <p:calendar required="true" value="#{descuento.fechaIni}" pattern="yyyy/MM/dd" converter="primefacesCalendarConverter"></p:calendar> </p:column>
+	<p:column> <f:facet name="header">#{msg.end_date}</f:facet> <p:calendar required="true" value="#{descuento.fechaFin}" pattern="yyyy/MM/dd" converter="primefacesCalendarConverter"></p:calendar> </p:column>
+	</p:dataTable>
+<p:commandButton action="#{habitacion.addOfertaDescuentoDTO()}"  oncomplete="dlgDescuento#{habitacion.tipoHabitacionId}.show();" update="tableDescuentos"  value="#{msg.new}" />
+</p:dialog>
+ <p:commandButton style=" font-size:10px;"  onclick="dlgDescuento#{habitacion.tipoHabitacionId}.show();" value="#{msg.deals}"  />
+</p:column>
+<p:column width="100">
+<f:facet name="header">#{msg.category}</f:facet>
+      <p:inputText  required="true" style="width:90px;" value="#{habitacion.categoria}" />
+  </p:column>
+    <p:column  width="120">
+    <f:facet name="header">#{msg.max_people}</f:facet>
+    <p:inputText required="true" style="width:110px;" value="#{habitacion.maxPers}" />
+    </p:column>
+       <p:column  width="130"> 
+       <f:facet name="header">#{msg.rooms_number}</f:facet>
+       <p:inputText required="true" style="width:120px;" value="#{habitacion.numHabitaciones}" />
+       </p:column>
+      <p:column  width="90">
+      <f:facet name="header">#{msg.price}</f:facet>
+       <p:inputText style="width:80px;" value="#{habitacion.precio}" /></p:column>
+</p:dataTable>
+       
+
+
+</p:dialog>
+	
+		</h:form>
+	
+		
+</p:panel>
+</f:view>
+</div>
+	
+	<div class="clear"></div>
+    		</ui:define>
+    	</ui:composition>
+    </h:body>
+</html>

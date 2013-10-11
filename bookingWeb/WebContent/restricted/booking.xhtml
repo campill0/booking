@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      
+      >
+    <h:body>
+    
+    	<ui:composition template="../template/common/commonLayout.xhtml">
+    		<ui:define name="content">
+        	<f:loadBundle basename="resource.MessageResources" var="msg" />
+        	
+        <f:view locale="#{languageBean.localeCode}">
+        <div id="inner-content">			
+    <div class="colUnique">
+	
+	<h:form>
+	 		
+    	#{searchHotelBean.query}
+    		
+    	
+    		<p:panel id="habitaciones" columns="1">
+    		<p:dataTable id="tiposHabitacionTable" value="#{reservaBean.hotel.habitaciones}" var="habitacion">
+    		
+    		<p:column>
+    		<f:facet name="header">Categoria</f:facet>
+    		<f:facet name="footer">Totales</f:facet>
+    		#{habitacion.categoria}
+    		</p:column>
+    		<p:column>
+    		<f:facet name="header">Max personas</f:facet>
+    		#{habitacion.maxPers}
+    		</p:column>
+    		<p:column >
+    		<f:facet name="header">Num habitaciones</f:facet>
+    		
+    		<p:spinner   value="#{reservaBean.numHabitaciones[habitacion.tipoHabitacionId]}" min="0" max="#{tipoHabitacionDAOImpl.getHabitacionesLibres(habitacion,reservaBean.fechaEntrada,reservaBean.fechaSalida)}">  
+                    <p:ajax  update="tiposHabitacionTable"  process="@this" />  
+                </p:spinner>  
+              
+ 
+              
+            
+    		</p:column>
+    		
+    		
+    		
+    			<p:column>
+    		<f:facet name="header">Precio total (#{(utilBean.daysBetween(reservaBean.fechaEntrada,reservaBean.fechaSalida) + 1)} día(s))</f:facet>
+    		<f:facet name="footer">#{reservaBean.getTotalPrecio()} €</f:facet>
+    		
+    		  #{habitacion.getPrecio(reservaBean.fechaEntrada,reservaBean.fechaSalida) * reservaBean.numHabitaciones[habitacion.tipoHabitacionId] } €
+    		
+    		</p:column>
+    		</p:dataTable>
+    
+    		
+    		 
+    		</p:panel>
+    		
+<p:panel>
+<div style="float:left; margin-left:30px;">
+<h:outputLabel for="start-date-cal-booking" value="#{msg.start_date}: " /> 
+ <p:calendar mode="inline"  id="start-date-cal-booking"  required="true" value="#{reservaBean.fechaEntrada}" pattern="yyyy/MM/dd" converter="primefacesCalendarConverter" >
+  <p:ajax  event="dateSelect" listener="#{reservaBean.handleDateSelect}" update="habitaciones"  ></p:ajax>
+ 
+</p:calendar></div>
+<div style="float:left; margin-left:30px;">
+<h:outputLabel for="end-date-cal-booking" value="#{msg.end_date}: " />  <p:calendar mode="inline" id="end-date-cal-booking" required="true" value="#{reservaBean.fechaSalida}" pattern="yyyy/MM/dd" converter="primefacesCalendarConverter">
+
+<p:ajax  event="dateSelect" listener="#{reservaBean.handleDateSelect}" update="habitaciones"  ></p:ajax>
+    	
+</p:calendar>
+</div>
+
+<div style="float:left; margin-left:30px;">
+<h:panelGrid columns="1"  border="0">
+<h:outputLabel value="#{msg.requests}" ></h:outputLabel>
+
+    	<p:inputTextarea  value="#{reservaBean.peticiones}" cols="35" rows="11" autoResize="false"  ></p:inputTextarea>
+    	</h:panelGrid>
+    	</div>
+<div class="clear"></div>
+    </p:panel>		
+    				
+    
+    	<p:growl id="growl2" showDetail="true"/>	
+    	 <p:commandButton  id="btn-booking"  value="#{msg.bookingPerform}" update="growl2"   actionListener="#{actionsControllerBean.bookingPerform}">
+        <f:attribute name="booking" value="#{reservaBean}" />
+       <f:attribute name="userlogin" value="#{loginBean.usuario}" />
+        </p:commandButton>
+        
+    		
+    		
+   </h:form>
+	
+   	</div>
+	</div>
+	</f:view>
+    		</ui:define>
+    	</ui:composition>
+    </h:body>
+</html>

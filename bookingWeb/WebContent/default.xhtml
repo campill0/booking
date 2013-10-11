@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      
+      >
+    <h:body>
+    
+    	<ui:composition template="/template/common/commonLayout.xhtml">
+    		<ui:define name="content">
+        	<f:loadBundle basename="resource.MessageResources" var="msg" />
+        	
+        <f:view locale="#{languageBean.localeCode}">
+        <div id="inner-content">			
+    		<div class="colLeft">
+    		
+    		<p:panel  style=" height:400px;">
+    	<h3>#{msg.buscar_hoteles}</h3>
+<h:form id="search-hotels-form">
+
+<h:panelGrid columns="2">
+
+<h:outputLabel for="start-date-cal" value="#{msg.start_date}: " />  <p:calendar id="start-date-cal"  required="true" value="#{searchHotelBean.fechaEntrada}" pattern="yyyy/MM/dd" converter="primefacesCalendarConverter" >
+<p:ajax  update=":results-table"  />  
+</p:calendar>
+<h:outputLabel for="end-date-cal" value="#{msg.end_date}: " />  <p:calendar id="end-date-cal" required="true" value="#{searchHotelBean.fechaSalida}" pattern="yyyy/MM/dd" converter="primefacesCalendarConverter">
+<p:ajax  update=":results-table"   />
+</p:calendar>
+<h:outputLabel for="person-number-spinner" value="#{msg.person_number}: " />  
+            <p:spinner id="person-number-spinner"                       value="#{searchHotelBean.personNumber}" min="0" max="1000"/>  
+
+<h:outputText value="#{msg.search_by}" />
+   
+<p:selectOneRadio   value="#{searchHotelBean.filter}"   id="queryoptions" >  
+	<f:selectItem  itemLabel="#{msg.cities}" itemValue="CITY"  />  
+	<f:selectItem itemLabel="#{msg.states}" itemValue="STATE" />  
+	<f:selectItem itemLabel="#{msg.hotels}" itemValue="HOTEL" />  
+	<p:ajax update=":search-hotels-form" />
+</p:selectOneRadio>
+<h:outputText  value="#{msg.query}" /> 
+ 
+
+ <p:autoComplete rendered="#{searchHotelBean.filterState}"  size="30" forceSelection="true" var="state" itemLabel="#{state.nombre}" itemValue="#{state}" converter="provinciaConverter" id="queryState" value="#{searchHotelBean.provincia}"  completeMethod="#{searchHotelBean.searchCompleteState}"/>
+ <p:autoComplete rendered="#{searchHotelBean.filterHotel}" size="30" forceSelection="true" var="hotel" itemLabel="#{hotel.nombre}" itemValue="#{hotel}"  converter="hotelConverter"    id="queryHotel" value="#{searchHotelBean.hotel}"  completeMethod="#{searchHotelBean.searchCompleteHotel}"/>
+ <p:autoComplete rendered="#{searchHotelBean.filterCity}"  size="30" forceSelection="true" var="city" itemLabel="#{city.nombre}" itemValue="#{city}" converter="ciudadConverter"   id="queryCity" value="#{searchHotelBean.ciudad}"  completeMethod="#{searchHotelBean.searchCompleteCity}" maxResults="100" minQueryLength="3"/>
+ 
+
+</h:panelGrid>  
+<p:growl id="growl" showDetail="true"/>
+      <p:commandButton  id="btn-search-hotel" value="#{msg.search}" update="search-hotels-form,:results-table,growl"  actionListener="#{actionsControllerBean.searchPerform}">
+        <f:attribute name="search" value="#{searchHotelBean}" />
+        
+        </p:commandButton>    
+  
+</h:form>
+
+    		
+			</p:panel>
+    		
+    	</div>
+	<div class="colRight">
+	
+    		<p:panel  style=" height:400px;">
+    		
+    	
+    		<h:form>
+
+    
+
+    <p:gmap center="40.4203,-3.70577" zoom="5" type="HYBRID" model="#{listaCiudadesBean.simpleModel}"  style="width:500px;height:380px">
+        <p:ajax event="overlaySelect" listener="#{listaCiudadesBean.onMarkerSelect}" update=":search-hotels-form" />
+    </p:gmap>
+
+</h:form>
+    		
+    		
+    		
+    		</p:panel>
+    		
+    	</div>
+	<div class="clear"></div>
+	<div class="colUnique">
+	
+    	
+    		
+	<h:form  id="results-table">
+    		<p:panel rendered="#{searchHotelBean.results}"  >
+    		<p:dataTable value="#{searchHotelBean.hoteles}" var="hotel"
+    		 paginator="true" rows="10" paginatorPosition="bottom"
+    		 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+             rowsPerPageTemplate="10,20,50" 
+             liveScroll="true"
+    		>
+    		
+    		<f:view>
+    		
+    		
+    		<p:column sortBy="#{hotel.nombre}">
+    		<f:facet name="header">#{msg.name}</f:facet>
+    		#{hotel.nombre}
+    		</p:column>
+    		<p:column sortBy="#{hotel.estrellas}" width="100">
+    		<f:facet name="header">#{msg.stars}</f:facet>
+    		<p:rating  readonly="true" value="#{hotel.estrellas}"></p:rating>
+    		</p:column>
+    		<p:column sortBy="#{hotel.ciudad.nombre}" width="100">
+    		<f:facet name="header">#{msg.city}</f:facet>
+    		#{hotel.ciudad.nombre}
+    		</p:column>
+    		<p:column rendered="#{(loginBean.logged) and (!loginBean.usuario.isAdmin())}">
+    			<p:commandButton   action="restricted/booking" actionListener="#{searchHotelBean.changeHotel()}"  value="#{msg.booking}"   >
+    			    <f:attribute name="search" value="#{searchHotelBean}" />
+    			</p:commandButton>
+    	
+    		
+    	
+    	
+    		</p:column>
+    		
+    		</f:view>
+    		</p:dataTable>
+    		
+    		</p:panel>
+    </h:form>	
+    
+    	
+    	
+    		
+    	
+    	</div>
+	</div>
+	</f:view>
+    		</ui:define>
+    	</ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      
+      >
+    <h:body>
+    
+    	<ui:composition template="/template/common/commonLayout.xhtml">
+    		<ui:define name="content">
+        	<f:loadBundle basename="resource.MessageResources" var="msg" />
+        	
+        <f:view locale="#{languageBean.localeCode}">
+        <div id="inner-content">			
+    
+	<div class="colUnique">
+	
+	<h:form>
+	
+	<p:dataTable id="table" value="#{reservaBean2.habitaciones}" var="habitacion">
+	<p:column>
+	<p:spinner value="#{reservaBean2.numHabitaciones[habitacion]}">
+	<p:ajax update="table"></p:ajax>
+	</p:spinner>
+	</p:column>
+	</p:dataTable>
+    </h:form>		
+    	</div>
+	</div>
+	</f:view>
+    		</ui:define>
+    	</ui:composition>
+    </h:body>
+</html>

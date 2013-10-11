@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+       xmlns:p="http://primefaces.org/ui"
+      >
+    <h:body>
+    	<ui:composition template="/template/common/commonLayout.xhtml">
+    		<ui:define name="content">
+        	<f:loadBundle basename="resource.MessageResources" var="msg" />
+<div class="colUnique" >
+<f:view>
+    		<p:panel header="#{msg.new_hotel}" style="width:445px;" >
+    		<h:form id="form-new-hotel">
+    		<p:messages id="msgs" escape="false"/>
+    		<h:panelGrid columns="2">
+    		<h:outputLabel styleClass="capitalize" for="nombreHotel" value="#{msg.name}:" />
+    		 <p:inputText id="nombreHotel" value="#{hotelDTOBean.nombre}" required="true" label="#{msg.name}:" validatorMessage="#{msg.name}:#{hotelDTOBean.nombre} no es un nombre correcto"/>
+    		 <h:outputLabel styleClass="capitalize" for="descHotel" value="#{msg.description}:" />
+    		 <p:inputText id="descHotel" value="#{hotelDTOBean.descripcion}" label="#{msg.description}:" />
+    		 <h:outputLabel styleClass="capitalize" for="direccionHotel" value="#{msg.address}:" />
+    		 <p:inputText id="direccionHotel" value="#{hotelDTOBean.direccion}" label="#{msg.address}:" />
+    		 <h:outputLabel styleClass="capitalize" for="estrellasHotel" value="#{msg.stars}:" />
+    		 <p:rating id="estrellasHotel" value="#{hotelDTOBean.estrellas}" />
+    		</h:panelGrid>
+    		
+			<ui:insert name="selectCityForm" >
+				<ui:include src="/template/selectCitySubForm.xhtml" />
+			</ui:insert>
+    		
+    	
+         
+		
+		
+	<p:dialog header="#{msg.unavailability_periods}" maximizable="true"  widgetVar="dlgpndHotel">
+<p:dataTable id="tablepndHotel"   var="pndHotel" value="#{hotelDTOBean.periodosNoDisponibilidad}">
+<p:column> <p:commandButton update="tablepndHotel"    oncomplete="dlgpndHotel.show();"  value="-" action="#{hotelDTOBean.removePeriodoNoDisponibilidadDTO(pndHotel)}"></p:commandButton> </p:column>
+<p:column> <f:facet name="header">#{msg.reason}</f:facet> <p:inputText required="true"  value="#{pndHotel.motivo}"></p:inputText> </p:column>
+<p:column> <f:facet name="header">#{msg.start_date}</f:facet> <p:calendar required="true" value="#{pndHotel.fechaIni}" pattern="yyyy/MM/dd" converter="primefacesCalendarConverter"></p:calendar>
+</p:column> <p:column> <f:facet name="header">#{msg.end_date}</f:facet> <p:calendar required="true" value="#{pndHotel.fechaFin}" pattern="yyyy/MM/dd" converter="primefacesCalendarConverter"></p:calendar> </p:column>
+</p:dataTable>
+<p:commandButton update="tablepndHotel" action="#{hotelDTOBean.addPeriodoNoDisponibilidadDTO()}"  oncomplete="dlgpndHotel.show();" value="#{msg.new}" />
+</p:dialog>
+
+<p:panelGrid  columns="1" styleClass="noBorders">
+<p:commandButton style="width:380px;"   onclick="dlgpndHotel.show();" value="#{msg.unavailability_periods}"  />
+		<p:commandButton style="width:100%;"  onclick="dlgNewRoomType.show();" value="#{msg.room_types}"  />
+    		<p:commandButton style="width:100%;" id="btn-save-hotel" value="#{msg.save_hotel}" update="form-new-hotel,:growl" actionListener="#{actionsControllerBean.saveHotel}">
+        <f:attribute name="hotel" value="#{hotelDTOBean}" />
+        <f:attribute name="ciudad" value="#{ciudadBean2}" />
+        </p:commandButton> 	
+</p:panelGrid>			
+				
+	</h:form>
+		
+	
+		<ui:insert name="selectHabitacionesForm" >
+				<ui:include src="/template/selectHabitaciones.xhtml" />
+			</ui:insert>
+		
+</p:panel>
+</f:view>
+</div>
+	
+	<div class="clear"></div>
+    		</ui:define>
+    	</ui:composition>
+    </h:body>
+</html>

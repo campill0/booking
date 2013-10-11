@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+       xmlns:p="http://primefaces.org/ui"
+      >
+    <body>
+	    <ui:composition>
+    		 	<f:view>
+  	    <f:loadBundle basename="resource.MessageResources" var="msg" />
+            <p:selectOneMenu  id="provincia2" value="#{ciudadBean2.provinciaElegida}" style=" width:400px;">
+                <f:selectItem itemLabel="#{msg.select_state}" itemValue="" />
+                <f:selectItems value="#{ciudadBean2.provincias}" />
+                <p:ajax update="ciudad2" listener="#{ciudadBean2.handleCityChange}" />
+            </p:selectOneMenu>
+		
+		 <p:selectOneMenu  id="ciudad2"  value="#{ciudadBean2.ciudadElegida}" style=" width:400px;" >
+              <f:selectItem itemLabel="#{msg.select_city}" itemValue="" />
+              <f:selectItems value="#{ciudadBean2.ciudades}"  />
+            </p:selectOneMenu>
+         
+    		 
+	
+
+    
+	
+	</f:view>
+			
+	    </ui:composition>
+    </body>
+</html>
+
+

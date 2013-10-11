@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+       xmlns:p="http://primefaces.org/ui"
+      >
+    <body>
+	    <ui:composition>
+	<p:growl id="growl" showDetail="true"/>
+			<div id="header-content">
+			<div id="header-logo">
+			<h:graphicImage alt="logo" library="images" id="headerlogo" value="/resources/images/logo.png"></h:graphicImage>
+			</div>
+			<div id="header-menu">
+			<div id="header-personal-form">
+			
+			<h:form>
+			<h:commandButton actionListener="#{languageBean.changeCountryLocaleCodeEn}" image="/resources/images/icons/flags/flag_en.png" style="width:50px; height:50px;" />
+			<h:commandButton actionListener="#{languageBean.changeCountryLocaleCodeEs}" image="/resources/images/icons/flags/flag_es.png" style="width:50px; height:50px;" />
+			<h:commandButton actionListener="#{languageBean.changeCountryLocaleCodeDe}" image="/resources/images/icons/flags/flag_de.png" style="width:50px; height:50px;" />
+			<h:commandButton actionListener="#{languageBean.changeCountryLocaleCodeIt}" image="/resources/images/icons/flags/flag_it.png" style="width:50px; height:50px;" />
+			<h:commandButton actionListener="#{languageBean.changeCountryLocaleCodeZh}" image="/resources/images/icons/flags/flag_zh.png" style="width:50px; height:50px;" />
+			<h:commandButton actionListener="#{languageBean.changeCountryLocaleCodeFr}" image="/resources/images/icons/flags/flag_fr.png" style="width:50px; height:50px;" />
+			
+			
+			</h:form>
+			
+    	
+    	<!-- <ul><li><h:link dir="hhtp:www.google.es" value="Spanish"/> </li><li><h:link dir="hhtp:www.google.co.uk" value="English"/> </li></ul> -->
+			</div>
+			<div id="header-special-actions">
+						
+						
+			</div>
+
+
+			
+			
+			</div>
+			</div>
+			<div><p:panel style=" height:45px;  ">
+<div style="float:right; font-size:10px; ">
+	
+    <div style="float:left;"><p:commandButton rendered="#{loginBean.logged}" style="text-transform: capitalize;" id="btn-logout" value="#{msg.loguout}" update="login-name-text,btn-logout,form-login" actionListener="#{loginBean.logout()}"/></div>
+	<div style="float:left;">
+	<h:form id="form-login" rendered="#{!loginBean.logged}">
+	<h:outputLabel for="login" value="#{msg.email}:" />  
+	<p:inputText id="login" value="#{loginBean.loginstr}" required="true" label="#{msg.login}" >  
+	</p:inputText>
+	<h:outputLabel for="passwordlogin" value="#{msg.password}:" />  
+	<p:password  id="passwordlogin"  value="#{loginBean.password}" required="true" label="#{msg.password}">  
+	</p:password>
+	<p:commandButton value="#{msg.login}" style="margin-left:20px;"   id="btn" update=":login-name-text,form-login,:growl"   actionListener="#{loginBean.login()}"/>
+	
+	</h:form>
+	</div>
+	<div style="float:right;"><h:form><p:commandButton  rendered="#{!loginBean.logged}" onclick="dlg2.show();" value="#{msg.signup}" style="  margin-left:20px; color:black ;" /></h:form></div>
+			<ui:insert name="signUpForm" >
+				<ui:include src="/template/signup/signUpForm.xhtml" />
+			</ui:insert>
+			
+	
+	</div>
+<div style="float:left; ">	
+
+<h:outputText value="#{loginBean.loginName()}" id="login-name-text"/>
+
+	<h:link outcome="/default" value="#{msg.home}" />
+	
+	<h:link rendered="#{loginBean.usuario.isAdmin()}"  outcome="/admin/newHotel" value="#{msg.new_hotel}" />
+	<h:link rendered="#{loginBean.usuario.isAdmin()}" outcome="/admin/managehotels" value="#{msg.manage_hotels}" />	
+	<h:link rendered="#{(loginBean.logged) and (!loginBean.usuario.isAdmin())}" outcome="/restricted/commentbookings" value="#{msg.comment_bookings}" />
+	<h:link rendered="#{(loginBean.logged) and (!loginBean.usuario.isAdmin())}" outcome="/restricted/cancelbookings" value="#{msg.cancel_bookings}" />	
+		
+
+	</div>	
+	
+	</p:panel></div>
+	    </ui:composition>
+    </body>
+</html>
+
+

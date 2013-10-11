@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+       xmlns:p="http://primefaces.org/ui"
+      >
+      <h:head>
+      <style >
+      
+      /* top */.ui-dock-top, .ui-dock-bottom{position:relative;height:50px;text-align:center;}.ui-dock-container-top{position:fixed;height:50px;padding-left:20px;}a.ui-dock-item-top{display:block;width:40px;position:absolute;top:0px;text-align:center;text-decoration:none;}.ui-dock-item-top img{border:none;margin:5px 10px 0px;width:100%;}.ui-dock-item-top span{display:none;padding-left:20px;}/* bottom */.ui-dock-bottom{width:100%;bottom:0px;position:absolute;left:0px;}.ui-dock-container-bottom{position:fixed;height:50px;padding-left:20px;}a.ui-dock-item-bottom{display:block;width:40px;bottom:0px;position:absolute;text-align:center;text-decoration:none;}.ui-dock-item-bottom span{display:none;padding-left:20px;}.ui-dock-item-bottom img{border:none;margin:5px 10px 0px;width:100%;}
+      .ui-stack{position:fixed;bottom:28px;right:40px;}.ui-stack > img{position:relative;cursor:pointer;padding-top:35px;z-index:2;}.ui-stack ul{list-style:none;position:absolute;top:5px;cursor:pointer;z-index:1;margin:0;padding:0;}.ui-stack ul li{position:absolute;}.ui-stack ul li img{border:0;}.ui-stack ul li span{display:none;}.ui-stack .openStack li span{font-family:"Lucida Grande", Lucida, Verdana, sans-serif;display:block;height:14px;position:absolute;top:17px;right:60px;line-height:14px;border:0;background-color:#000;padding:3px 10px;border-radius:10px;-webkit-border-radius:10px;-moz-border-radius:10px;color:#fcfcfc;text-align:center;text-shadow:#000 1px 1px 1px;opacity:.85;filter:alpha(opacity = 85);}/* IE Fixes */.ui-stack{_position:absolute;}.ui-stack ul{_z-index:-1;_top:-15px;}.ui-stack ul li{*right:5px;}
+      		body {			background: url(http://www.primefaces.org:8080/showcase/images/macosx/macback.png);			margin: 0;			padding: 0;			font-family: geneva, arial, helvetica, sans-serif;			font-size:80%;		}		.ui-menuitem-icon.ui-icon.appleIcon {			background: url(../images/macosx/apple.png) no-repeat;            width:16px;            height:16px;            border-radius:0px;		}        .ui-dialog .ui-terminal {            border:0;        }        .ui-dialog.terminalDialog .ui-dialog-content {            padding:0;        }
+      		.dp-xml .cdata { color: #ff1493; }.dp-xml .tag, .dp-xml .tag-name { color: #069; font-weight: bold; }.dp-xml .attribute { color: red; }.dp-xml .attribute-value { color: blue; }	
+      </style>
+      </h:head>
+     
+    <h:body>
+    						
+<p:growl showDetail="true" sticky="true"/>
+
+<p:menubar>
+	<p:submenu icon="appleIcon" label=" ">
+		<p:menuitem value="About This Mac" url="#" onclick="info.show();"></p:menuitem>
+	</p:submenu>
+			
+	<p:submenu label="Finder">
+		<p:menuitem value="About Finder" url="#" styleClass="open"></p:menuitem>
+	</p:submenu>
+	
+	<p:submenu label="Edit">
+		<p:menuitem value="Undo" url="#" styleClass="undo" helpText="‚undo"></p:menuitem>
+		<p:menuitem value="Redo" url="#" styleClass="redo" helpText="‚redo"></p:menuitem>
+	</p:submenu>
+	
+	<p:submenu label="View">
+		<p:menuitem value="Source" url="#" onclick="source.show();"></p:menuitem>
+	</p:submenu>
+</p:menubar>
+	
+<p:dialog header="About This Mac" draggable="true" widgetVar="info" showEffect="fade" hideEffect="fade">
+	<h:form>
+		<h:panelGrid columns="1" style="width:100%;text-align:center;">
+			<p:graphicImage value="http://www.primefaces.org:8080/showcase/images/macosx/apple.png" />
+			<h:outputText value="MOCK OS X" style="font-size:16px"/>
+			<h:outputText value="Version 10.5.7" />
+			<p:commandButton value="Software Update" async="true" onclick="return false;"/>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2">
+			<h:outputText value="Processor" style="font-weight:bold"/>
+			<h:outputText value="2.4 GHz Intel Core 2 Duo" />
+			
+			<h:outputText value="Memory" style="font-weight:bold"/>
+			<h:outputText value="4 GB 667 MHz DDR2 SDRAM" />
+			
+			<h:outputText value="Startup Disk" style="font-weight:bold"/>
+			<h:outputText value="Macintosh HD" />
+		</h:panelGrid>
+		
+	</h:form>
+</p:dialog>
+
+<p:dialog widgetVar="terminal" width="600" height="400" header="Terminal" resizable="false" showEffect="fade" hideEffect="fade">
+    <h:form>
+        <p:terminal widgetVar="term" commandHandler="#{terminalController.handleCommand}" width="590px"
+                welcomeMessage="Welcome to PrimeFaces Terminal, how are you today? Try date and greet  commands."/>
+    </h:form>
+</p:dialog>
+
+<p:dialog widgetVar="terminal" styleClass="terminal, terminalDialog" width="600" height="400" header="Terminal" showEffect="fade" hideEffect="fade">
+	<h:form>
+	<p:terminal commandHandler="#{terminalController.handleCommand}" width="100%" height="100%" 
+				welcomeMessage="Welcome to PrimeFaces Terminal, how are you today?"/>
+	</h:form>
+</p:dialog>
+
+
+<p:dock>
+	<p:menuitem label="Finder" icon="http://www.primefaces.org:8080/showcase/images/macosx/finder.png" url="#" />
+	<p:menuitem label="Terminal" icon="http://www.primefaces.org:8080/showcase/images/macosx/terminal.png" url="#" onclick="terminal.show();term.focus();"/>
+	<p:menuitem label="Safari" icon="http://www.primefaces.org:8080/showcase/images/macosx/safari.png" url="#" />
+	<p:menuitem label="iTunes" icon="http://www.primefaces.org:8080/showcase/images/macosx/itunes.png" url="#"/>
+	<p:menuitem label="iChat" icon="http://www.primefaces.org:8080/showcase/images/macosx/ichat.png" url="#"/>
+	<p:menuitem label="Trash" icon="http://www.primefaces.org:8080/showcase/images/macosx/trash.png" url="#"/>
+</p:dock>
+
+<p:stack icon="http://www.primefaces.org:8080/showcase/images/stack/stack.png">
+    <p:menuitem value="Aperture" icon="http://www.primefaces.org:8080/showcase/images/stack/aperture.png" url="#" />
+    <p:menuitem value="Photoshop" icon="http://www.primefaces.org:8080/showcase/images/stack/photoshop.png" url="#"/>
+    <p:menuitem value="Coda" icon="http://www.primefaces.org:8080/showcase/images/stack/coda.png" url="#"/>
+    <p:menuitem value="Safari" icon="http://www.primefaces.org:8080/showcase/images/stack/safari.png" url="#" />
+    <p:menuitem value="Finder" icon="http://www.primefaces.org:8080/showcase/images/stack/finder.png" url="#" />
+</p:stack>
+			
+    </h:body>
+</html>

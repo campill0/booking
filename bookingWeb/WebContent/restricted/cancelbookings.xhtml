@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      
+      >
+    <h:body>
+    
+    	<ui:composition template="/template/common/commonLayout.xhtml">
+    		<ui:define name="content">
+        	<f:loadBundle basename="resource.MessageResources" var="msg" />
+        	
+        <f:view locale="#{languageBean.localeCode}">
+        <div id="inner-content">			
+    <div class="colUnique">
+	<p:panel >
+	<h:form>
+	<p:dataTable sortBy="#{reserva.fechaIni.timeInMillis}" value="#{reservasUsuarioBean.reservas}" var="reserva">
+	<p:column   >
+	<f:facet name="header">#{msg.busy}</f:facet>
+	<p:selectBooleanCheckbox disabled="true"  value="#{reserva.ocupado}"  ></p:selectBooleanCheckbox>
+	</p:column>
+	
+	<p:column   >
+	<f:facet name="header">#{msg.hotel}</f:facet>
+	<h:outputText value="#{reserva.hotel.nombre}" />
+	
+	</p:column>
+	 
+	<p:column   >
+	<f:facet name="header">#{msg.in_date}</f:facet>
+	<h:outputText value="#{utilBean.calendarToString(reserva.fechaIni)}" />
+	
+	</p:column>
+	<p:column   >
+	<f:facet name="header">#{msg.out_date}</f:facet>
+	<h:outputText value="#{utilBean.calendarToString(reserva.fechaFin)}" />
+	
+	</p:column>
+	
+	<p:column   >
+	<f:facet name="header">#{msg.sleeps}</f:facet>
+	<h:outputText value="#{reserva.plazas}" />
+	
+	</p:column>
+	
+	<p:column>
+	<f:facet name="header">#{msg.canceled}</f:facet>
+	<p:selectBooleanCheckbox  value="#{reserva.cancelada}"  ></p:selectBooleanCheckbox>
+	
+	</p:column>
+	
+	
+	
+	</p:dataTable>
+	<p:growl id="growl" showDetail="true"/>
+	
+        
+        
+        
+        
+      
+      
+          
+        <p:commandButton id="showDialogButton" value="#{msg.cancel_selected_bookings}" onclick="confirmation.show()" type="button"/>  
+    
+      
+    <p:confirmDialog id="confirmDialog" message="#{msg.are_you_sure_about_cancelling_the_selected_bookings}"  
+                header="#{msg.cancel_selected_bookings}" severity="alert" widgetVar="confirmation">  
+                <p:commandButton  id="confirm"  value="#{msg.cancel_Booking}" update="growl"  oncomplete="confirmation.hide()" actionListener="#{actionsControllerBean.updateBookingPerform}">      <f:attribute name="reservasUsuario" value="#{reservasUsuarioBean}" />         </p:commandButton>     
+         
+        <p:commandButton id="decline" value="#{msg.not_yet}" onclick="confirmation.hide()" type="button" />   
+                  
+    </p:confirmDialog> 
+        
+          
+        
+        </h:form> 
+	</p:panel>
+   	</div>
+	</div>
+	</f:view>
+    		</ui:define>
+    	</ui:composition>
+    </h:body>
+</html>

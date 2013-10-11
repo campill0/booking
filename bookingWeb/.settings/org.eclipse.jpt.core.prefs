@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+org.eclipse.jpt.core.platform=generic2_0
+org.eclipse.jpt.jpa.core.discoverAnnotatedClasses=false
+problem.COLUMN_UNRESOLVED_NAME=error
+problem.INVERSE_JOIN_COLUMN_NAME_MUST_BE_SPECIFIED_MULTIPLE_JOIN_COLUMNS=error
+problem.INVERSE_JOIN_COLUMN_UNRESOLVED_NAME=error
+problem.JOIN_COLUMN_UNRESOLVED_NAME=error
+problem.PERSISTENCE_XML_UNSUPPORTED_CONTENT=warning
+problem.PRIMARY_KEY_JOIN_COLUMN_UNRESOLVED_NAME=warning
+workspace_preferences_overriden=true
